@@ -105,6 +105,35 @@
 		
 	</section>
 	<script	th:src="@{/js/medico.js(v=${version})}"	th:fragment="js"></script>
-	<script th:inline="javascript" th:fragment="inlinescript"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+	$(document).ready(function () {
+		moment.locale('pt-BR');
+		var idMedico = [[${medico.id != null ? medico.id : 0}]];
+		if (idMedico != 0) {
+			var table = $('#table-medico-especializacao').DataTable({
+				searching: false,
+				lengthMenu: [3, 5],
+				processing: true,
+				serverSide: true,
+				responsive: true,
+				ajax: {
+					url: '/especialidades/datatables/server/medico/' + idMedico,
+					data: 'data'
+				},
+				columns: [
+					{data: 'id'},
+					{data: 'titulo'},
+					{orderable: false,
+					 data: 'id',
+						"render": function(id) {
+							return '<a class="btn btn-danger btn-sm btn-block" href="/medicos/id/' + idMedico + '/excluir/especializacao/' +
+								id +'" role="button" data-toggle="modal" data-target="#confirm-modal"><i class="fas fa-times-circle"></i></a>';
+						}
+					}
+				]
+			});
+		}
+	}); 
+	</script>
 </body>
 </html>
