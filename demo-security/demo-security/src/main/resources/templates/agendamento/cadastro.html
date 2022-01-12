@@ -26,7 +26,7 @@
 					
 						<div th:replace="fragments/alert :: alerta-sucesso"></div>
 												
-						<form th:action="@{/agendamentos/salvar}" th:object="${agendamento}"
+						<form th:action="${agendamento.id == null} ? @{/agendamentos/salvar} : @{/agendamentos/editar}" th:object="${agendamento}"
 							method="POST" class="was-validated">
 							
 							<div class="form-row">
@@ -100,6 +100,24 @@
 		
 	</section>
 	<script	th:src="@{/js/agendamento.js(v=${version})}" th:fragment="js"></script>
-	<script th:inline="javascript" th:fragment="inlinescript"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+	// buscar o médico pela especialidade
+	/*[# th:if="${agendamento.medico != null}"]*/
+		$( document ).ready(function() {
+			var id = [[${agendamento.medico.id}]];
+			var titulo = [(${#strings.concat("'",agendamento.especialidade.titulo,"'")})];
+			$.get( "/medicos/especialidade/titulo/" + titulo, function( result ) {
+				$.each(result, function (k, v) {
+					$("#medicos").append(
+						 '<div class="custom-control custom-radio">'
+						+  '<input class="custom-control-input" type="radio" id="customRadio'+ k +'" name="medico.id" value="'+ v.id +'" required '+ (v.id == id ? "checked" : "")+' />'
+						+  '<label class="custom-control-label" for="customRadio'+ k +'">'+ v.nome +'</label>'
+						+'</div>'
+					);
+				});
+			});
+		});
+	/*[/]*/
+	</script>
 </body>
 </html>
