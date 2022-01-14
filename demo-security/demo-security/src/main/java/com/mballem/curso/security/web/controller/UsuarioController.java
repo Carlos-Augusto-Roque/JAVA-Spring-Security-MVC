@@ -3,6 +3,7 @@ package com.mballem.curso.security.web.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +148,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping("/cadastro/paciente/salvar")
-	public String salvarCadastroPaciente(Usuario usuario, BindingResult result) {
+	public String salvarCadastroPaciente(Usuario usuario, BindingResult result) throws MessagingException {
 		try {
 		service.salvarCadastroPaciente(usuario);
 		} catch (DataIntegrityViolationException ex){
